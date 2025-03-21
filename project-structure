@@ -1,0 +1,20 @@
+/
+├── components/           # UI组件
+│   ├── layout/           # 布局组件
+│   ├── course/           # 课程相关组件
+│   └── player/           # 视频播放器组件
+├── pages/                # 页面路由
+│   ├── index.js          # 首页
+│   ├── courses/          # 课程列表页
+│   ├── course/[slug]/    # 课程详情页
+│   └── player/[id]/      # 视频播放页
+├── content/              # 课程内容
+│   └── courses/          # 课程MDX文件
+├── public/               # 静态资源
+│   └── images/           # 图片资源
+├── styles/               # CSS样式
+├── lib/                  # 工具函数
+│   ├── vimeo.js          # Vimeo API集成
+│   └── firebase.js       # Firebase集成
+└── config/               # 配置文件
+    └── courses.json      # 课程结构配置 

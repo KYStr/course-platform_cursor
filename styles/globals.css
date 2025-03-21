@@ -1,0 +1,2229 @@
+/* 引入已有的樣式變量 */
+:root {
+  /* 色彩系統 */
+  --primary-color: #4361ee;
+  --secondary-color: #3f37c9;
+  --accent-color: #4cc9f0;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  --bg-light: #f8f9fa;
+  --bg-dark: #212529;
+  --success-color: #4caf50;
+  --warning-color: #ff9800;
+  --error-color: #f44336;
+  
+  /* 字體 */
+  --font-sans: 'PingFang TC', 'Microsoft JhengHei', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  
+  /* 間距 */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  
+  /* 圓角 */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+  
+  /* 陰影 */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+/* 全局重置 */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: var(--text-primary);
+  line-height: 1.6;
+  background-color: var(--bg-light);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  background: none;
+  outline: none;
+}
+
+/* 通用容器 */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+main {
+  flex: 1;
+}
+
+/* 載入動畫 */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xxl) 0;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: var(--primary-color);
+  animation: spin 1s linear infinite;
+  margin-bottom: var(--spacing-md);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 課程列表頁樣式 */
+.courses-page .page-header {
+  background-color: var(--primary-color);
+  color: white;
+  padding: var(--spacing-xl) 0;
+  margin-bottom: var(--spacing-xl);
+}
+
+.courses-page .page-title {
+  font-size: 2rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.courses-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
+  gap: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  background-color: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.filter-label {
+  font-weight: 500;
+  margin-right: var(--spacing-sm);
+  color: var(--text-secondary);
+}
+
+.categories-filter {
+  flex: 1;
+  min-width: 300px;
+}
+
+.categories-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+}
+
+.category-btn {
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-light);
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  transition: all 0.3s;
+  border: 1px solid transparent;
+}
+
+.category-btn:hover {
+  background-color: rgba(67, 97, 238, 0.1);
+  color: var(--primary-color);
+}
+
+.category-btn.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.sort-filter {
+  display: flex;
+  align-items: center;
+}
+
+.sort-select {
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background-color: white;
+  font-size: 0.9rem;
+  min-width: 150px;
+}
+
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.no-courses {
+  text-align: center;
+  padding: var(--spacing-xl) 0;
+}
+
+.no-courses i {
+  font-size: 3rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-md);
+}
+
+.no-courses h3 {
+  margin-bottom: var(--spacing-sm);
+}
+
+.no-courses p {
+  margin-bottom: var(--spacing-lg);
+  color: var(--text-secondary);
+}
+
+/* 課程卡片樣式 */
+.course-card {
+  background-color: white;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+.course-image {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+}
+
+.course-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.featured-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.course-info {
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  color: white;
+}
+
+.course-category {
+  display: inline-block;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.course-title {
+  font-size: 2.5rem;
+  margin-bottom: var(--spacing-md);
+  line-height: 1.2;
+}
+
+.course-description {
+  font-size: 1.1rem;
+  margin-bottom: var(--spacing-lg);
+  opacity: 0.9;
+}
+
+.course-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.instructor-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.instructor-info img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.instructor-info div {
+  display: flex;
+  flex-direction: column;
+}
+
+.instructor-info span {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.instructor-info h3 {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.course-rating,
+.course-duration,
+.course-lessons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.course-rating i {
+  color: #ffc107;
+}
+
+.rating-count {
+  color: var(--text-secondary);
+  margin-left: 2px;
+}
+
+.course-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid #eee;
+}
+
+.course-price {
+  margin-bottom: var(--spacing-md);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  margin-right: var(--spacing-sm);
+}
+
+.discount-price {
+  color: var(--primary-color);
+}
+
+.free-course {
+  color: var(--success-color);
+}
+
+.btn-enroll {
+  width: 100%;
+  padding: var(--spacing-md);
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.btn-enroll:hover {
+  background-color: var(--secondary-color);
+}
+
+.btn-enroll:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.course-features {
+  margin-top: var(--spacing-lg);
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  color: var(--text-secondary);
+}
+
+.feature i {
+  color: var(--primary-color);
+}
+
+.course-guarantee {
+  margin-top: var(--spacing-lg);
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.course-guarantee i {
+  color: var(--primary-color);
+  margin-right: var(--spacing-xs);
+}
+
+/* 響應式調整 */
+@media (max-width: 768px) {
+  .courses-filters {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .sort-filter {
+    width: 100%;
+    margin-top: var(--spacing-md);
+  }
+  
+  .sort-select {
+    flex: 1;
+  }
+  
+  .courses-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+  
+  .course-title {
+    font-size: 1.8rem;
+  }
+  
+  .course-meta {
+    gap: var(--spacing-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .courses-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .sort-filter {
+    flex-direction: column;
+  }
+}
+
+/* 頭部導航 */
+.main-header {
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 15px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.main-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo h1 {
+  font-size: 1.8rem;
+  color: var(--primary-color);
+  margin: 0;
+}
+
+.main-nav ul {
+  display: flex;
+  list-style: none;
+  gap: 20px;
+}
+
+.main-nav a {
+  text-decoration: none;
+  color: var(--text-secondary);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: color 0.3s;
+}
+
+.main-nav a:hover, .main-nav a.active {
+  color: var(--primary-color);
+}
+
+/* 搜索框 */
+.search-box {
+  display: flex;
+  border: 1px solid #ddd;
+  border-radius: 30px;
+  overflow: hidden;
+  width: 250px;
+}
+
+.search-box input {
+  flex: 1;
+  border: none;
+  padding: 8px 15px;
+  outline: none;
+}
+
+.search-box button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  cursor: pointer;
+}
+
+/* 用戶操作區 */
+.user-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-login, .btn-signup {
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-login {
+  background-color: transparent;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+}
+
+.btn-signup {
+  background-color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  color: white;
+}
+
+.btn-login:hover {
+  background-color: rgba(67, 97, 238, 0.1);
+}
+
+.btn-signup:hover {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+}
+
+/* 頁腳 */
+.main-footer {
+  background-color: var(--bg-dark);
+  color: white;
+  padding: 40px 0 20px;
+  margin-top: 50px;
+}
+
+/* 認證頁面樣式 (登入/註冊) */
+.auth-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--bg-light);
+  padding: var(--spacing-lg) var(--spacing-md);
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 450px;
+  background-color: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-xl);
+}
+
+.auth-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.auth-logo h1 {
+  color: var(--primary-color);
+  font-size: 1.8rem;
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.auth-header h2 {
+  font-size: 1.5rem;
+  margin-bottom: var(--spacing-xs);
+  color: var(--text-primary);
+}
+
+.auth-header p {
+  color: var(--text-secondary);
+}
+
+.auth-error {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  background-color: rgba(244, 67, 54, 0.1);
+  color: var(--error-color);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.auth-form {
+  margin-bottom: var(--spacing-lg);
+}
+
+.form-group {
+  margin-bottom: var(--spacing-md);
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.label-with-link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xs);
+}
+
+.label-with-link a {
+  font-size: 0.85rem;
+  color: var(--primary-color);
+}
+
+.input-with-icon {
+  position: relative;
+}
+
+.input-with-icon i {
+  position: absolute;
+  left: var(--spacing-md);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+}
+
+.input-with-icon input {
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) calc(var(--spacing-md) * 2 + 1rem);
+  border: 1px solid #ddd;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.input-with-icon input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  cursor: pointer;
+}
+
+.checkbox-label input {
+  width: 18px;
+  height: 18px;
+}
+
+.checkbox-label span {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.checkbox-label a {
+  color: var(--primary-color);
+}
+
+.btn-auth {
+  width: 100%;
+  background-color: var(--primary-color);
+  color: white;
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.btn-auth:hover {
+  background-color: var(--secondary-color);
+}
+
+.btn-auth:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.auth-divider {
+  position: relative;
+  text-align: center;
+  margin: var(--spacing-lg) 0;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: calc(50% - 70px);
+  height: 1px;
+  background-color: #ddd;
+}
+
+.auth-divider::before {
+  left: 0;
+}
+
+.auth-divider::after {
+  right: 0;
+}
+
+.auth-divider span {
+  display: inline-block;
+  padding: 0 var(--spacing-sm);
+  background-color: white;
+  position: relative;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.social-auth {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.btn-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  transition: all 0.3s;
+  border: 1px solid #ddd;
+  background-color: white;
+}
+
+.btn-social:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-social:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-social.google {
+  color: #4285F4;
+}
+
+.btn-social.facebook {
+  color: #3b5998;
+}
+
+.btn-social i {
+  font-size: 1.2rem;
+}
+
+/* 響應式調整 */
+@media (max-width: 480px) {
+  .auth-container {
+    padding: var(--spacing-lg);
+  }
+}
+
+/* 用戶頭像樣式 - 使用 JavaScript 控制 */
+.user-menu {
+  position: relative;
+  cursor: pointer;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--primary-color);
+}
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 5px);
+  right: 0;
+  width: 200px;
+  background-color: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: var(--spacing-sm) 0;
+  margin-top: var(--spacing-sm);
+  z-index: 100;
+}
+
+.dropdown-menu a,
+.dropdown-menu button {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  width: 100%;
+  text-align: left;
+  transition: background-color 0.3s;
+}
+
+.dropdown-menu a:hover,
+.dropdown-menu button:hover {
+  background-color: var(--bg-light);
+  color: var(--primary-color);
+}
+
+.dropdown-menu button {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+/* 移除 hover 顯示邏輯，由 JavaScript 控制 */
+/* .user-menu:hover .dropdown-menu {
+  display: block;
+} */
+
+/* 其他樣式保持不變 */
+
+/* 課程詳情頁樣式 */
+.course-detail {
+  background-color: var(--bg-light);
+}
+
+.course-header {
+  background-color: white;
+  padding: var(--spacing-xl) 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.course-header .container {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: var(--spacing-xl);
+}
+
+.course-title {
+  font-size: 2rem;
+  margin-bottom: var(--spacing-md);
+  color: var(--text-primary);
+}
+
+.course-description {
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-lg);
+  line-height: 1.6;
+}
+
+.course-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-lg);
+}
+
+.course-instructor {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.instructor-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.course-stats {
+  display: flex;
+  gap: var(--spacing-md);
+  color: var(--text-secondary);
+}
+
+.course-stats span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.course-rating {
+  color: var(--warning-color);
+}
+
+.course-preview {
+  background-color: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.course-thumbnail {
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 比例 */
+  position: relative;
+}
+
+.course-thumbnail img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.course-cta {
+  padding: var(--spacing-lg);
+}
+
+.course-price-box {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.price.free {
+  color: var(--success-color);
+}
+
+.original-price {
+  font-size: 1rem;
+  color: var(--text-muted);
+  text-decoration: line-through;
+}
+
+.btn-enroll {
+  width: 100%;
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  font-size: 1rem;
+}
+
+.btn-wishlist {
+  width: 100%;
+  padding: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  background-color: white;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  border-radius: var(--radius-md);
+  transition: all 0.3s;
+}
+
+.btn-wishlist:hover {
+  background-color: rgba(67, 97, 238, 0.05);
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.course-content-wrapper {
+  padding: var(--spacing-xl) 0;
+}
+
+.course-content-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--spacing-xl);
+}
+
+.course-main-content {
+  background-color: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.course-section {
+  padding: var(--spacing-xl);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.course-section:last-child {
+  border-bottom: none;
+}
+
+.course-section h2 {
+  margin-bottom: var(--spacing-lg);
+  font-size: 1.5rem;
+  color: var(--text-primary);
+}
+
+.curriculum-section {
+  margin-bottom: var(--spacing-lg);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md);
+  background-color: var(--bg-light);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.section-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.section-lessons {
+  padding: var(--spacing-sm) 0;
+}
+
+.lesson-item {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  gap: var(--spacing-sm);
+  transition: background-color 0.3s;
+}
+
+.lesson-item:hover {
+  background-color: var(--bg-light);
+}
+
+.lesson-title {
+  flex: 1;
+}
+
+.lesson-duration {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.instructor-profile {
+  padding: var(--spacing-md) 0;
+}
+
+.instructor-header {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.instructor-avatar-large {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.instructor-info h3 {
+  margin: 0 0 var(--spacing-xs);
+  font-size: 1.2rem;
+}
+
+.instructor-title {
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.instructor-bio {
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.course-sidebar {
+  align-self: start;
+}
+
+.course-info-card {
+  background-color: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: var(--spacing-lg);
+}
+
+.course-info-card h3 {
+  margin: 0 0 var(--spacing-md);
+  font-size: 1.2rem;
+  color: var(--text-primary);
+}
+
+.course-info-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.course-info-list li {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-secondary);
+}
+
+.course-info-list li:last-child {
+  border-bottom: none;
+}
+
+.course-info-list i {
+  color: var(--primary-color);
+  font-size: 1.1rem;
+}
+
+.no-content {
+  padding: var(--spacing-lg);
+  text-align: center;
+  color: var(--text-muted);
+}
+
+/* 響應式調整 */
+@media (max-width: 992px) {
+  .course-header .container {
+    grid-template-columns: 1fr;
+  }
+  
+  .course-content-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .course-preview {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .course-title {
+    font-size: 1.5rem;
+  }
+  
+  .course-meta {
+    flex-direction: column;
+    gap: var(--spacing-md);
+  }
+}
+
+/* 錯誤頁面樣式 */
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl);
+  text-align: center;
+  min-height: 60vh;
+}
+
+.error-icon {
+  font-size: 4rem;
+  color: var(--error-color);
+  margin-bottom: var(--spacing-lg);
+}
+
+.error-container h2 {
+  font-size: 1.8rem;
+  margin-bottom: var(--spacing-md);
+  color: var(--text-primary);
+}
+
+.error-container p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-xl);
+  max-width: 500px;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: var(--primary-color);
+  animation: spin 1s ease-in-out infinite;
+  margin-bottom: var(--spacing-lg);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 優化 Footer 樣式 */
+.site-footer {
+  background-color: var(--bg-dark);
+  color: var(--text-light);
+  padding: var(--spacing-xl) 0 var(--spacing-md);
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+.footer-left {
+  flex: 1;
+  min-width: 300px;
+  max-width: 400px;
+}
+
+.footer-logo {
+  margin-bottom: var(--spacing-md);
+}
+
+.footer-logo img {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+.footer-description {
+  margin-bottom: var(--spacing-md);
+  color: var(--text-muted-light);
+  line-height: 1.6;
+}
+
+.social-links {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.social-links a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-light);
+  transition: all 0.3s;
+}
+
+.social-links a:hover {
+  background-color: var(--primary-color);
+  transform: translateY(-3px);
+}
+
+.footer-right {
+  flex: 2;
+  min-width: 300px;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xl);
+}
+
+.footer-links-column {
+  flex: 1;
+  min-width: 150px;
+}
+
+.footer-links-column h3 {
+  color: white;
+  margin-bottom: var(--spacing-md);
+  font-size: 1.1rem;
+}
+
+.footer-links-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links-column li {
+  margin-bottom: var(--spacing-sm);
+}
+
+.footer-links-column a {
+  color: var(--text-muted-light);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.footer-links-column a:hover {
+  color: var(--primary-color);
+}
+
+.footer-bottom {
+  padding-top: var(--spacing-md);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: center;
+  color: var(--text-muted-light);
+  font-size: 0.9rem;
+}
+
+/* 優化課程卡片樣式 */
+.course-card {
+  background-color: white;
+  border-radius: var(--radius-md);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.course-image {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%; /* 16:9 比例 */
+  overflow: hidden;
+}
+
+.course-image img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s;
+}
+
+.course-card:hover .course-image img {
+  transform: scale(1.05);
+}
+
+.course-content {
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.course-title {
+  margin: 0 0 var(--spacing-sm);
+  font-size: 1.1rem;
+  line-height: 1.4;
+}
+
+.course-title a {
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.course-instructor {
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-sm);
+  font-size: 0.9rem;
+}
+
+.course-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.course-meta span {
+  display: flex;
+  align-items: center;
+}
+
+.course-meta i {
+  margin-right: 4px;
+}
+
+.course-rating {
+  color: var(--warning-color);
+}
+
+.course-price {
+  margin-top: auto;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.price {
+  color: var(--primary-color);
+  font-size: 1.1rem;
+}
+
+.price.free {
+  color: var(--success-color);
+}
+
+.original-price {
+  color: var(--text-muted);
+  text-decoration: line-through;
+  font-size: 0.9rem;
+  font-weight: normal;
+}
+
+/* 搜索結果樣式 */
+.courses-header {
+  background-color: var(--bg-light);
+  padding: var(--spacing-xl) 0;
+  margin-bottom: var(--spacing-xl);
+}
+
+.courses-header h1 {
+  margin: 0 0 var(--spacing-sm);
+  color: var(--text-primary);
+}
+
+.search-results {
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.courses-container {
+  padding-bottom: var(--spacing-xxl);
+}
+
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.no-courses {
+  text-align: center;
+  padding: var(--spacing-xxl) 0;
+  color: var(--text-muted);
+}
+
+.no-courses i {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-md);
+  color: var(--text-muted);
+}
+
+.no-courses h2 {
+  margin-bottom: var(--spacing-md);
+  color: var(--text-primary);
+}
+
+.no-courses p {
+  margin-bottom: var(--spacing-lg);
+}
+
+/* 響應式調整 */
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+  
+  .footer-left {
+    max-width: 100%;
+  }
+  
+  .courses-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .courses-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .footer-links {
+    flex-direction: column;
+    gap: var(--spacing-lg);
+  }
+}
+
+/* 主內容區域 */
+.main-content {
+  min-height: calc(100vh - 70px - 300px); /* 視窗高度減去頭部和底部 */
+  padding-bottom: var(--spacing-xxl);
+}
+
+.site-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* 錯誤信息 */
+.error-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xxl) 0;
+  color: var(--danger-color);
+  text-align: center;
+}
+
+.error-message i {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-md);
+}
+
+/* Header 樣式 */
+.site-header {
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+  padding: 0 var(--spacing-md);
+}
+
+.logo {
+  flex-shrink: 0;
+}
+
+.logo img {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+.search-bar {
+  flex-grow: 1;
+  max-width: 500px;
+  margin: 0 var(--spacing-xl);
+}
+
+.search-bar form {
+  display: flex;
+  position: relative;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  padding-right: 40px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+}
+
+.search-bar button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 40px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-nav ul {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.main-nav a {
+  color: var(--text-primary);
+  font-weight: 500;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  transition: all 0.3s;
+}
+
+.main-nav a:hover {
+  color: var(--primary-color);
+  background-color: rgba(67, 97, 238, 0.05);
+}
+
+.main-nav a.btn-primary {
+  color: white;
+  background-color: var(--primary-color);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+}
+
+.main-nav a.btn-primary:hover {
+  background-color: var(--secondary-color);
+  transform: translateY(-2px);
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: var(--spacing-xs);
+}
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-toggle {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  font-weight: 500;
+  color: var(--text-primary);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.dropdown-toggle:hover {
+  background-color: rgba(67, 97, 238, 0.05);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  min-width: 180px;
+  padding: var(--spacing-sm) 0;
+  display: none;
+  z-index: 1000;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-menu a,
+.dropdown-menu button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: var(--text-primary);
+  font-weight: normal;
+  transition: all 0.3s;
+}
+
+.dropdown-menu a:hover,
+.dropdown-menu button:hover {
+  background-color: rgba(67, 97, 238, 0.05);
+  color: var(--primary-color);
+}
+
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+/* 響應式調整 */
+@media (max-width: 992px) {
+  .search-bar {
+    max-width: 300px;
+    margin: 0 var(--spacing-md);
+  }
+}
+
+@media (max-width: 768px) {
+  .header-inner {
+    padding: 0 var(--spacing-sm);
+  }
+  
+  .search-bar {
+    max-width: 200px;
+    margin: 0 var(--spacing-sm);
+  }
+  
+  .main-nav ul {
+    gap: var(--spacing-sm);
+  }
+}
+
+@media (max-width: 640px) {
+  .mobile-menu-toggle {
+    display: block;
+  }
+  
+  .main-nav {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 70px);
+    background-color: white;
+    padding: var(--spacing-lg);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
+  }
+  
+  .main-nav.mobile-open {
+    transform: translateX(0);
+  }
+  
+  .main-nav ul {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-lg);
+  }
+  
+  .search-bar {
+    margin-right: auto;
+  }
+}
+
+/* 新版課程詳情頁樣式 */
+.course-detail-new {
+  background-color: var(--bg-light);
+}
+
+/* 課程頭部 */
+.course-hero {
+  background-color: var(--primary-color);
+  color: white;
+  padding: var(--spacing-xl) 0;
+}
+
+.course-hero-content {
+  max-width: 800px;
+}
+
+.course-hero .course-title {
+  font-size: 2.2rem;
+  margin-bottom: var(--spacing-md);
+  font-weight: 700;
+}
+
+.course-hero .course-subtitle {
+  font-size: 1.1rem;
+  margin-bottom: var(--spacing-xl);
+  line-height: 1.6;
+  opacity: 0.9;
+}
+
+.course-actions {
+  background-color: white;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.course-price-box {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.price-label {
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.price-amount {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.price-amount.free {
+  color: var(--success-color);
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+.course-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  padding: var(--spacing-md) 0;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.stat-value {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-weight: 500;
+}
+
+.btn-enroll {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  width: 100%;
+  text-align: center;
+}
+
+.btn-enroll:hover {
+  background-color: var(--secondary-color);
+  transform: translateY(-2px);
+}
+
+.btn-enroll:disabled {
+  background-color: var(--text-muted);
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 課程內容 */
+.course-content-container {
+  padding: var(--spacing-xl) 0;
+}
+
+.course-content-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--spacing-xl);
+}
+
+.course-section {
+  background-color: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--spacing-xl);
+  overflow: hidden;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  padding: var(--spacing-lg);
+  margin: 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.section-content {
+  padding: var(--spacing-lg);
+  line-height: 1.6;
+}
+
+.lessons-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.lesson-item {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  position: relative;
+}
+
+.lesson-header {
+  margin-bottom: var(--spacing-sm);
+}
+
+.lesson-title {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin: 0 0 var(--spacing-xs);
+}
+
+.lesson-subtitle {
+  font-size: 1.2rem;
+  margin: 0;
+  color: var(--text-primary);
+}
+
+.lesson-description {
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-md);
+}
+
+.lesson-tag {
+  display: inline-block;
+  background-color: var(--bg-light);
+  color: var(--text-secondary);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+}
+
+.course-features {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.feature-item h3 {
+  font-size: 1.2rem;
+  margin: 0 0 var(--spacing-sm);
+  color: var(--text-primary);
+}
+
+.feature-item p {
+  color: var(--text-secondary);
+  margin: 0 0 var(--spacing-sm);
+}
+
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-sm);
+}
+
+.feature-list li {
+  position: relative;
+  padding-left: var(--spacing-lg);
+}
+
+.feature-list li:before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--success-color);
+  font-weight: bold;
+}
+
+.sidebar-card {
+  background-color: white;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  position: sticky;
+  top: 90px;
+}
+
+.card-header {
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.card-content {
+  padding: var(--spacing-lg);
+}
+
+.instructor-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.instructor-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: var(--spacing-md);
+}
+
+.instructor-name {
+  font-size: 1.2rem;
+  margin: 0 0 var(--spacing-sm);
+}
+
+.instructor-bio {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* 響應式調整 */
+@media (max-width: 992px) {
+  .course-content-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .sidebar-card {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .course-hero .course-title {
+    font-size: 1.8rem;
+  }
+  
+  .feature-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .course-price-box {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-xs);
+  }
+  
+  .course-stats {
+    flex-direction: column;
+  }
+}
+
+/* 側邊欄特色列表樣式 */
+.sidebar-feature-list {
+  grid-template-columns: 1fr !important;
+  margin-top: var(--spacing-sm);
+}
+
+.sidebar-card {
+  margin-bottom: var(--spacing-lg);
+}
+
+.sidebar-card:last-child {
+  margin-bottom: 0;
+}
+
+/* Markdown 內容樣式 */
+.markdown-content {
+  line-height: 1.7;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4,
+.markdown-content h5,
+.markdown-content h6 {
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  color: var(--text-primary);
+}
+
+.markdown-content h1 {
+  font-size: 1.8rem;
+}
+
+.markdown-content h2 {
+  font-size: 1.5rem;
+}
+
+.markdown-content h3 {
+  font-size: 1.3rem;
+}
+
+.markdown-content p {
+  margin-bottom: var(--spacing-md);
+}
+
+.markdown-content ul,
+.markdown-content ol {
+  margin-bottom: var(--spacing-md);
+  padding-left: var(--spacing-xl);
+}
+
+.markdown-content ul {
+  list-style-type: disc;
+}
+
+.markdown-content ol {
+  list-style-type: decimal;
+}
+
+.markdown-content li {
+  margin-bottom: var(--spacing-xs);
+}
+
+.markdown-content a {
+  color: var(--primary-color);
+  text-decoration: underline;
+}
+
+.markdown-content blockquote {
+  border-left: 4px solid var(--primary-color);
+  padding-left: var(--spacing-md);
+  margin-left: 0;
+  margin-right: 0;
+  font-style: italic;
+  color: var(--text-secondary);
+}
+
+.markdown-content code {
+  background-color: var(--bg-light);
+  padding: 2px 4px;
+  border-radius: var(--radius-sm);
+  font-family: monospace;
+}
+
+.markdown-content pre {
+  background-color: var(--bg-dark);
+  color: white;
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  margin-bottom: var(--spacing-md);
+}
+
+.markdown-content pre code {
+  background-color: transparent;
+  padding: 0;
+  color: inherit;
+}
+
+.markdown-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+  margin: var(--spacing-md) 0;
+}
+
+.markdown-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: var(--spacing-md);
+}
+
+.markdown-content th,
+.markdown-content td {
+  border: 1px solid var(--border-color);
+  padding: var(--spacing-sm);
+  text-align: left;
+}
+
+.markdown-content th {
+  background-color: var(--bg-light);
+  font-weight: bold;
+} 
