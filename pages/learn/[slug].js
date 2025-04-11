@@ -9,6 +9,7 @@ import { useAuth } from '../../context/auth-context';
 import { checkEnrollment } from '../../api/enrollments';
 import siteConfig from '../../config/site';
 import { FiClock, FiCheck, FiLock, FiChevronDown, FiChevronUp } from 'react-icons/fi';
+import ReactMarkdown from 'react-markdown';
 
 export default function LearnPage() {
   const router = useRouter();
@@ -217,10 +218,8 @@ export default function LearnPage() {
                       </div>
                       
                       <div className="video-info">
-                        <h2 className="video-title">{currentVideo.title}</h2>
-                        <p className="video-description">{currentVideo.description}</p>
-                        
-                        <div className="video-actions">
+                        <div className="video-header">
+                          <h2 className="video-title">{currentVideo.title}</h2>
                           <button 
                             className={`btn-complete ${completedVideos.includes(currentVideo.id) ? 'completed' : ''}`}
                             onClick={() => handleCompleteVideo(currentVideo.id)}
@@ -228,8 +227,11 @@ export default function LearnPage() {
                             <FiCheck className="icon" />
                             {completedVideos.includes(currentVideo.id) ? '已完成' : '標記為已完成'}
                           </button>
-                          
-                          {/* 其他按鈕，如下載資源等 */}
+                        </div>
+                        <div className="video-description-container">
+                          <div className="video-description">
+                            <ReactMarkdown>{currentVideo.description || ''}</ReactMarkdown>
+                          </div>
                         </div>
                       </div>
                     </>
@@ -432,21 +434,33 @@ export default function LearnPage() {
         
         .video-info {
           padding: 20px;
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+        }
+        
+        .video-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding-bottom: 15px;
+          border-bottom: 1px solid #e0e0e0;
         }
         
         .video-title {
-          font-size: 20px;
-          margin-bottom: 10px;
+          margin: 0;
+          font-size: 24px;
+          color: #333;
+        }
+        
+        .video-description-container {
+          width: 100%;
         }
         
         .video-description {
           color: #666;
-          margin-bottom: 20px;
-        }
-        
-        .video-actions {
-          display: flex;
-          gap: 10px;
+          line-height: 1.6;
+          width: 100%;
         }
         
         .btn-complete {
@@ -458,6 +472,8 @@ export default function LearnPage() {
           border-radius: 4px;
           cursor: pointer;
           transition: background-color 0.3s;
+          color: #666;
+          white-space: nowrap;
         }
         
         .btn-complete:hover {
@@ -469,8 +485,13 @@ export default function LearnPage() {
           color: #388e3c;
         }
         
-        .icon {
+        .btn-complete .icon {
           margin-right: 6px;
+        }
+        
+        .video-actions {
+          display: flex;
+          gap: 10px;
         }
         
         .no-video-selected {

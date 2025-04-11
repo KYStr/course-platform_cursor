@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { getUserCourses, getUserNotes, getUserProgress } from '../api/courses';
 import { useAuth } from '../context/auth-context';
-import MainLayout from '../components/layout/MainLayout';
+import Layout from '../components/Layout';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -413,5 +413,5 @@ function formatTime(seconds) {
 
 // 使用主佈局
 DashboardPage.getLayout = function getLayout(page) {
-  return <MainLayout>{page}</MainLayout>;
+  return <Layout>{page}</Layout>;
 }; 

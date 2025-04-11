@@ -2,7 +2,7 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { getFeaturedCourses, getLatestCourses, getCategories } from '../api/courses';
-import MainLayout from '../components/layout/MainLayout';
+import Layout from '../components/Layout';
 
 // 首頁組件
 export default function HomePage() {
@@ -155,5 +155,5 @@ function CategoryCard({ category }) {
 
 // 重要：添加這個 getLayout 函數
 HomePage.getLayout = function getLayout(page) {
-  return <MainLayout>{page}</MainLayout>;
+  return <Layout>{page}</Layout>;
 }; 

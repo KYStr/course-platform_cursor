@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useAuth } from '../context/auth-context';
@@ -8,6 +8,22 @@ export default function Header() {
   const [searchTerm, setSearchTerm] = useState('');
   const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+  
+  // 處理點擊外部關閉下拉選單
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    }
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
   
   // 處理搜索提交
   const handleSearch = (e) => {
@@ -21,11 +37,21 @@ export default function Header() {
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
+
+  // 處理登出
+  const handleLogout = async () => {
+    try {
+      await logout();
+      router.push('/');
+    } catch (error) {
+      console.error('登出失敗:', error);
+    }
+  };
   
   return (
     <header className="site-header">
       <div className="container">
-        <div className="header-inner">
+        <div className="header-content">
           <div className="logo">
             <Link href="/">
               <img src="/images/logo.png" alt="學習平台" />
@@ -62,25 +88,34 @@ export default function Header() {
                           我的學習
                         </Link>
                       </li>
-                      <li className="dropdown">
-                        <button className="dropdown-toggle">
+                      <li className="dropdown" ref={dropdownRef}>
+                        <button 
+                          className="dropdown-toggle"
+                          onClick={() => setDropdownOpen(!dropdownOpen)}
+                        >
                           <img 
                             src={user?.photoURL || "/images/avatar-placeholder.webp"} 
                             alt={user?.displayName || "用戶"} 
                             className="user-avatar"
                           />
                           <span>{user?.displayName || "用戶"}</span>
+                          <i className={`ri-arrow-down-s-line ${dropdownOpen ? 'open' : ''}`}></i>
                         </button>
-                        <div className="dropdown-menu">
+                        <div className={`dropdown-menu ${dropdownOpen ? 'show' : ''}`}>
                           <Link href="/profile">
+                            <i className="ri-user-settings-line"></i>
                             個人資料
                           </Link>
                           {(user?.role === 'admin' || user?.role === 'instructor') && (
                             <Link href="/admin/dashboard">
+                              <i className="ri-dashboard-line"></i>
                               管理後台
                             </Link>
                           )}
-                          <button onClick={logout}>登出</button>
+                          <button onClick={handleLogout}>
+                            <i className="ri-logout-box-line"></i>
+                            登出
+                          </button>
                         </div>
                       </li>
                     </>
@@ -103,7 +138,10 @@ export default function Header() {
             </ul>
           </nav>
           
-          <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
+          <button 
+            className="mobile-menu-toggle"
+            onClick={toggleMobileMenu}
+          >
             <i className={`ri-${mobileMenuOpen ? 'close' : 'menu'}-line`}></i>
           </button>
         </div>
