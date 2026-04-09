@@ -1,7 +1,8 @@
 import { db, storage } from '../lib/firebase';
 import { 
   collection, doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, 
-  query, where, orderBy, limit, setDoc, serverTimestamp, deleteObject
+  query, where, orderBy, limit, setDoc, serverTimestamp, deleteObject,
+  writeBatch
 } from 'firebase/firestore';
 import { ref, getDownloadURL, uploadBytes } from 'firebase/storage';
 import { getVimeoVideoInfo } from '../lib/vimeo';
@@ -913,6 +914,95 @@ export const getVideos = async (courseId, sectionId) => {
     return videos;
   } catch (error) {
     console.error('獲取視頻失敗:', error);
+    throw error;
+  }
+};
+
+// ===== 帳號查詢功能 =====
+
+export const getAccountEntries = async (courseId) => {
+  try {
+    const snapshot = await getDocs(
+      collection(db, 'courses', courseId, 'accountEntries')
+    );
+    return snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+  } catch (error) {
+    console.error('獲取帳號條目失敗:', error);
+    throw error;
+  }
+};
+
+export const createAccountEntry = async (courseId, data) => {
+  try {
+    const ref = await addDoc(
+      collection(db, 'courses', courseId, 'accountEntries'),
+      { queryKey: data.queryKey, account: data.account, password: data.password }
+    );
+    return { id: ref.id, ...data };
+  } catch (error) {
+    console.error('新增帳號條目失敗:', error);
+    throw error;
+  }
+};
+
+export const updateAccountEntry = async (courseId, entryId, data) => {
+  try {
+    const entryRef = doc(db, 'courses', courseId, 'accountEntries', entryId);
+    await updateDoc(entryRef, {
+      queryKey: data.queryKey,
+      account: data.account,
+      password: data.password
+    });
+    return { id: entryId, ...data };
+  } catch (error) {
+    console.error('更新帳號條目失敗:', error);
+    throw error;
+  }
+};
+
+export const deleteAccountEntry = async (courseId, entryId) => {
+  try {
+    await deleteDoc(doc(db, 'courses', courseId, 'accountEntries', entryId));
+  } catch (error) {
+    console.error('刪除帳號條目失敗:', error);
+    throw error;
+  }
+};
+
+export const batchCreateAccountEntries = async (courseId, entries) => {
+  try {
+    const batch = writeBatch(db);
+    const colRef = collection(db, 'courses', courseId, 'accountEntries');
+    const created = [];
+
+    entries.forEach(entry => {
+      const newRef = doc(colRef);
+      batch.set(newRef, {
+        queryKey: entry.queryKey,
+        account: entry.account,
+        password: entry.password
+      });
+      created.push({ id: newRef.id, ...entry });
+    });
+
+    await batch.commit();
+    return created;
+  } catch (error) {
+    console.error('批量新增帳號條目失敗:', error);
+    throw error;
+  }
+};
+
+export const deleteAllAccountEntries = async (courseId) => {
+  try {
+    const snapshot = await getDocs(
+      collection(db, 'courses', courseId, 'accountEntries')
+    );
+    const batch = writeBatch(db);
+    snapshot.docs.forEach(d => batch.delete(d.ref));
+    await batch.commit();
+  } catch (error) {
+    console.error('清空帳號條目失敗:', error);
     throw error;
   }
 }; 

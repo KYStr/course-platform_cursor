@@ -10,6 +10,7 @@ import { checkEnrollment } from '../../api/enrollments';
 import siteConfig from '../../config/site';
 import { FiClock, FiCheck, FiLock, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import ReactMarkdown from 'react-markdown';
+import AccountLookup from '../../components/AccountLookup';
 
 export default function LearnPage() {
   const router = useRouter();
@@ -24,10 +25,14 @@ export default function LearnPage() {
   const [expandedSections, setExpandedSections] = useState({});
   const [completedVideos, setCompletedVideos] = useState([]);
   const [progress, setProgress] = useState(0);
+  const [videoError, setVideoError] = useState(null);
+  const [isVideoLoading, setIsVideoLoading] = useState(true);
 
   // 在組件頂部添加一個輔助函數來處理視頻 URL
   const getVideoEmbedUrl = (video) => {
     if (!video) return null;
+    
+    let vimeoId = null;
     
     // 檢查是否有 videoUrl
     if (video.videoUrl) {
@@ -35,15 +40,22 @@ export default function LearnPage() {
       if (video.videoUrl.includes('vimeo.com')) {
         const match = video.videoUrl.match(/(?:vimeo\.com\/|player\.vimeo\.com\/video\/|vimeo\.com\/video\/)(\d+)/);
         if (match && match[1]) {
-          return `https://player.vimeo.com/video/${match[1]}?title=0&byline=0&portrait=0`;
+          vimeoId = match[1];
         }
+      } else {
+        // 如果 videoUrl 本身就是 ID
+        vimeoId = video.videoUrl;
       }
-      return `https://player.vimeo.com/video/${video.videoUrl}?title=0&byline=0&portrait=0`;
     }
     
     // 檢查是否有 vimeoId
-    if (video.vimeoId) {
-      return `https://player.vimeo.com/video/${video.vimeoId}?title=0&byline=0&portrait=0`;
+    if (!vimeoId && video.vimeoId) {
+      vimeoId = video.vimeoId;
+    }
+    
+    // 如果找到了有效的 vimeoId，返回嵌入 URL
+    if (vimeoId) {
+      return `https://player.vimeo.com/video/${vimeoId}?title=0&byline=0&portrait=0`;
     }
     
     return null;
@@ -202,17 +214,43 @@ export default function LearnPage() {
                       <div className="video-player">
                         {getVideoEmbedUrl(currentVideo) ? (
                           <div className="responsive-video">
-                            {console.log('Video URL:', getVideoEmbedUrl(currentVideo))}
-                            <iframe 
-                              src={getVideoEmbedUrl(currentVideo)} 
-                              frameBorder="0" 
-                              allow="autoplay; fullscreen" 
-                              allowFullScreen
-                            ></iframe>
+                            {isVideoLoading && (
+                              <div className="video-loading">
+                                <div className="spinner"></div>
+                                <p>視頻加載中...</p>
+                              </div>
+                            )}
+                            {videoError ? (
+                              <div className="video-error">
+                                <i className="ri-error-warning-line"></i>
+                                <p>{videoError}</p>
+                                <button 
+                                  className="btn-retry"
+                                  onClick={() => {
+                                    setVideoError(null);
+                                    setIsVideoLoading(true);
+                                  }}
+                                >
+                                  重試
+                                </button>
+                              </div>
+                            ) : (
+                              <iframe 
+                                src={getVideoEmbedUrl(currentVideo)} 
+                                frameBorder="0" 
+                                allow="autoplay; fullscreen" 
+                                allowFullScreen
+                                onLoad={() => setIsVideoLoading(false)}
+                                onError={() => {
+                                  setVideoError('視頻加載失敗，請確認 Vimeo ID 是否正確');
+                                  setIsVideoLoading(false);
+                                }}
+                              ></iframe>
+                            )}
                           </div>
                         ) : (
                           <div className="video-placeholder">
-                            <p>視頻尚未上傳</p>
+                            <p>視頻尚未上傳或 Vimeo ID 無效</p>
                           </div>
                         )}
                       </div>
@@ -304,6 +342,13 @@ export default function LearnPage() {
           </div>
         </div>
       ) : null}
+
+      {course?.accountLookupEnabled && (
+        <AccountLookup
+          courseId={course.id}
+          label={course.accountLookupLabel || '請輸入查詢資訊'}
+        />
+      )}
       
       <style jsx>{`
         .learn-loading, .learn-error, .learn-not-enrolled {
@@ -413,6 +458,7 @@ export default function LearnPage() {
           padding-bottom: 56.25%; /* 16:9 比例 */
           height: 0;
           overflow: hidden;
+          background-color: #000;
         }
         
         .responsive-video iframe {
@@ -421,6 +467,7 @@ export default function LearnPage() {
           left: 0;
           width: 100%;
           height: 100%;
+          border: none;
         }
         
         .video-placeholder {
@@ -612,6 +659,60 @@ export default function LearnPage() {
           color: #666;
           display: flex;
           align-items: center;
+        }
+        
+        .video-loading,
+        .video-error {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          background-color: rgba(0, 0, 0, 0.1);
+          color: #666;
+        }
+        
+        .video-loading .spinner {
+          border: 4px solid rgba(0, 0, 0, 0.1);
+          border-radius: 50%;
+          border-top: 4px solid #3498db;
+          width: 40px;
+          height: 40px;
+          animation: spin 1s linear infinite;
+          margin-bottom: 10px;
+        }
+        
+        .video-error {
+          background-color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .video-error i {
+          font-size: 48px;
+          color: #f44336;
+          margin-bottom: 10px;
+        }
+        
+        .video-error p {
+          margin-bottom: 15px;
+          text-align: center;
+        }
+        
+        .btn-retry {
+          padding: 8px 16px;
+          background-color: #2196f3;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: background-color 0.3s;
+        }
+        
+        .btn-retry:hover {
+          background-color: #1976d2;
         }
       `}</style>
     </Layout>

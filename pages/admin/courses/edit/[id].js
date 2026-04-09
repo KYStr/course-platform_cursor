@@ -40,7 +40,9 @@ export default function EditCourse() {
     prerequisites: [],
     whyTakeThisCourse: '',
     difficulty: 3,
-    language: '中文'
+    language: '中文',
+    accountLookupEnabled: false,
+    accountLookupLabel: '請輸入班級座號'
   });
   const [thumbnail, setThumbnail] = useState(null);
   const [thumbnailPreview, setThumbnailPreview] = useState(null);
@@ -87,7 +89,9 @@ export default function EditCourse() {
           prerequisites: course.prerequisites || [],
           whyTakeThisCourse: course.whyTakeThisCourse || '',
           difficulty: course.difficulty || 3,
-          language: course.language || '中文'
+          language: course.language || '中文',
+          accountLookupEnabled: course.accountLookupEnabled || false,
+          accountLookupLabel: course.accountLookupLabel || '請輸入班級座號'
         });
         
         setCategories(categoriesData);
@@ -229,7 +233,9 @@ export default function EditCourse() {
         status: courseData.status || 'draft',
         featured: Boolean(courseData.featured),
         whyTakeThisCourse: courseData.whyTakeThisCourse || '',
-        prerequisites: Array.isArray(courseData.prerequisites) ? courseData.prerequisites : []
+        prerequisites: Array.isArray(courseData.prerequisites) ? courseData.prerequisites : [],
+        accountLookupEnabled: Boolean(courseData.accountLookupEnabled),
+        accountLookupLabel: courseData.accountLookupLabel || '請輸入班級座號'
       };
       
       // 更新課程
@@ -509,6 +515,40 @@ export default function EditCourse() {
             <small>支持 Markdown 格式，可以添加標題、列表、引用等</small>
           </div>
           
+          <div className="form-section-divider">
+            <h3>帳號查詢功能</h3>
+            <p className="section-hint">啟用後，學生可在課程學習頁面查詢分配給他們的帳號密碼</p>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group checkbox-group">
+              <label className="checkbox-label">
+                <input
+                  type="checkbox"
+                  name="accountLookupEnabled"
+                  checked={courseData.accountLookupEnabled}
+                  onChange={handleInputChange}
+                />
+                <span>啟用帳號查詢</span>
+              </label>
+            </div>
+          </div>
+
+          {courseData.accountLookupEnabled && (
+            <div className="form-group">
+              <label htmlFor="accountLookupLabel">查詢提示文字</label>
+              <input
+                type="text"
+                id="accountLookupLabel"
+                name="accountLookupLabel"
+                value={courseData.accountLookupLabel}
+                onChange={handleInputChange}
+                placeholder="例如：請輸入班級座號"
+              />
+              <small>學生在查詢輸入框中會看到這段提示文字</small>
+            </div>
+          )}
+
           <div className="form-actions">
             <Link href="/admin/courses" className="btn-secondary">
               取消

@@ -1204,6 +1204,18 @@ export default function CourseContent() {
             </div>
                 </div>
 
+          {/* 帳號查詢管理入口 */}
+          <div className="account-lookup-entry">
+            <Link href={`/admin/courses/accounts?id=${id}`} legacyBehavior>
+              <a className="account-lookup-link">
+                <i className="ri-key-2-line"></i>
+                <span>帳號查詢管理</span>
+                {course.accountLookupEnabled && <span className="enabled-badge">已啟用</span>}
+                <i className="ri-arrow-right-s-line"></i>
+              </a>
+            </Link>
+          </div>
+
           {/* 可折疊說明 */}
           <div className="content-instructions">
             <div 
@@ -1952,6 +1964,40 @@ export default function CourseContent() {
         
         .btn-add-first-video:hover {
           background-color: #1976d2;
+        }
+
+        .account-lookup-entry {
+          margin-bottom: 20px;
+        }
+        .account-lookup-link {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 14px 20px;
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
+          border-radius: 8px;
+          color: #334155;
+          text-decoration: none;
+          font-size: 15px;
+          font-weight: 500;
+          transition: background 0.2s, border-color 0.2s;
+        }
+        .account-lookup-link:hover {
+          background: #f1f5f9;
+          border-color: #cbd5e1;
+        }
+        .account-lookup-link .enabled-badge {
+          background: #dcfce7;
+          color: #166534;
+          font-size: 12px;
+          padding: 2px 8px;
+          border-radius: 10px;
+          font-weight: 600;
+        }
+        .account-lookup-link i:last-child {
+          margin-left: auto;
+          color: #94a3b8;
         }
       `}</style>
     </AdminLayout>
